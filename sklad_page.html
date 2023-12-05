@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Складской учет</title>
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto p-8">
+    <a href="#" onclick="goBack()" class="text-blue-500">&larr; Назад</a>
+    <h1 class="text-2xl font-bold mb-6">Выберите склад</h1>
+
+    <form id="skladForm" method="post">
+        <div class="mb-4">
+            <label for="sklad" class="block text-sm font-medium text-gray-600">Склад</label>
+            <select id="sklad" name="sklad" class="mt-1 p-2 w-full border rounded">
+                <option value="hudjand">Худжанд</option>
+                <option value="dushanbe">Душанбе</option>
+                <option value="shop">Магазин торговли 'Мебель Таджикистан'</option>
+            </select>
+        </div>
+
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Выбрать склад</button>
+    </form>
+</div>
+
+<script>
+            function goBack() {
+            window.history.back();
+        }
+    document.getElementById('skladForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        var selectedSklad = document.getElementById('sklad').value;
+
+        // Redirect the user to the warehouse page
+        window.location.href = "sklad_" + selectedSklad + ".html";
+    });
+</script>
+
+</body>
+</html>

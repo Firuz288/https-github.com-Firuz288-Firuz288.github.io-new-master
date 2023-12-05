@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Склад Худжанд</title>
+    <style>
+        body {
+            background-color: #f7fafc;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+
+        .text-gray-600 {
+            color: #4a5568;
+        }
+
+        .border {
+            border-color: #e2e8f0;
+        }
+
+        .bg-white {
+            background-color: #ffffff;
+        }
+
+        .bg-blue-500 {
+            background-color: #4299e1;
+        }
+
+        .text-white {
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-8">
+        <a href="#" onclick="goBack()" class="text-blue-500">&larr; Назад</a>
+        <h1 class="text-2xl font-bold mb-6">Склад Худжанд</h1>
+
+        <div class="mb-4">
+            <label for="categoryFilter" class="block text-sm font-medium text-gray-600">Фильтр по категории:</label>
+
+            <label for="searchInput" class="ml-4">Поиск по номеру товара:</label>
+            <input type="text" id="searchInput" class="p-2 border rounded">
+
+            <button type="button" onclick="sendItems()" class="bg-blue-500 text-white px-4 py-2 rounded">Отправить товары</button>
+
+
+            <select id="categoryFilter" class="mt-1 p-2 w-full border rounded">
+                <option value="">Все категории</option>
+                <option value="Категория 1">Категория 1</option>
+                <option value="Категория 2">Категория 2</option>
+                <option value="Категория 3">Категория 3</option>
+                <option value="Категория 4">Категория 4</option>
+                <option value="Категория 5">Категория 5</option>
+            </select>
+        </div>
+
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Номер товара</th>
+                    <th class="py-2 px-4 border-b">Наименование</th>
+                    <th class="py-2 px-4 border-b">Категория</th>
+                    <th class="py-2 px-4 border-b">Тип</th>
+                    <th class="py-2 px-4 border-b">Модель</th>
+                    <th class="py-2 px-4 border-b">Цвет</th>
+                    <th class="py-2 px-4 border-b">Размер</th>
+                    <th class="py-2 px-4 border-b">Цена</th>
+                    <th class="py-2 px-4 border-b">Количество</th>
+                    <th class="py-2 px-4 border-b">Производитель</th>
+                    <th class="py-2 px-4 border-b">Изображение</th>
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+                <!-- JavaScript will dynamically generate filtered and searched rows here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        // Function to generate a random integer between min and max
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Function to generate a random item with furniture-related images (140x140 pixels)
+        function generateRandomItem(index) {
+            const countries = ["Китай", "США", "Германия", "Франция", "Италия", "Япония", "Индия", "Бразилия"];
+            const randomCountry = countries[getRandomInt(0, countries.length - 1)];
+
+            return {
+                number: index + 1,
+                name: "Мебель " + (index + 1),
+                category: "Категория " + getRandomInt(1, 5),
+                type: "Тип " + getRandomInt(1, 3),
+                model: "Модель " + getRandomInt(1, 10),
+                color: "Цвет " + getRandomInt(1, 8),
+                size: getRandomInt(50, 200) + "x" + getRandomInt(50, 200) + " см",
+                price: getRandomInt(50, 500) + "$",
+                quantity: getRandomInt(0, 999),
+                manufacturer: randomCountry,
+                imageUrl: `https://picsum.photos/140/140?image=${index + 1000}`, // Updated image size
+            };
+        }
+
+        // Generate 100 random items
+        const items = Array.from({
+            length: 100
+        }, (_, index) => generateRandomItem(index));
+
+        // Function to update the table based on filters and search
+        function updateTable() {
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+
+            // Filter and search items
+            const filteredItems = items.filter(item => {
+                const categoryMatch = !categoryFilter || item.category === categoryFilter;
+                const searchMatch = !searchInput || item.name.toLowerCase().includes(searchInput);
+                return categoryMatch && searchMatch;
+            });
+
+            // Clear existing rows
+            const tableBody = document.getElementById("itemTableBody");
+            tableBody.innerHTML = '';
+
+            // Append filtered and searched items to the table
+            for (const item of filteredItems) {
+                const tableRow = document.createElement("tr");
+                tableRow.innerHTML = `
+                    <td class="py-2 px-4 border-b">${item.number}</td>
+                    <td class="py-2 px-4 border-b">${item.name}</td>
+                    <td class="py-2 px-4 border-b">${item.category}</td>
+                    <td class="py-2 px-4 border-b">${item.type}</td>
+                    <td class="py-2 px-4 border-b">${item.model}</td>
+                    <td class="py-2 px-4 border-b">${item.color}</td>
+                    <td class="py-2 px-4 border-b">${item.size}</td>
+                    <td class="py-2 px-4 border-b">${item.price}</td>
+                    <td class="py-2 px-4 border-b">${item.quantity}</td>
+                    <td class="py-2 px-4 border-b">${item.manufacturer}</td>
+                    <td class="py-2 px-4 border-b">
+                        <img src="${item.imageUrl}" alt="${item.name}" class="w-8 h-8 rounded-full">
+                    </td>
+                `;
+                tableBody.appendChild(tableRow);
+            }
+        }
+
+        // Function to send items to Dušanbe
+        function sendItems() {
+            // Your existing code for sending items goes here
+            // ...
+            // For example:
+            alert('Items sent successfully!');
+        }
+
+        // Attach event listeners to the filter and search elements
+        document.getElementById('categoryFilter').addEventListener('change', updateTable);
+        document.getElementById('searchInput').addEventListener('input', updateTable);
+
+        // Initial table update
+        updateTable();
+    </script>
+</body>
+
+</html>
